@@ -30,7 +30,11 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MyOmit<T, K> = any
+// 如果没有 as 关键字，键将被解释为普通属性键，并且基于 P extends K 的条件类型排除将无法按预期工作
+// 因此它的主要目标是映射索引签名的键
+type MyOmit<T, K extends keyof T> = {
+  [P in keyof T as P extends K ? never : P]: T[P]
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
